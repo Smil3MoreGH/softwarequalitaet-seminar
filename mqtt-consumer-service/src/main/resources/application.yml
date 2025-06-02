@@ -1,0 +1,35 @@
+spring:
+  application:
+    name: mqtt-consumer-service
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: sps-data
+      username: admin
+      password: admin123
+      authentication-database: admin
+
+server:
+  port: 8090  # Wichtig: Anderer Port als REST API!
+
+mqtt:
+  broker:
+    url: tcp://sr-labor.ddns.net:1883
+    username: paul.hartung@stud.hs-bochum.de
+    password: 18464155
+    client-id: mqtt-consumer-${random.uuid}
+  topics:
+    wago:
+      status: Wago750/Status
+      control: Wago750/Control
+    siemens:
+      ist: S7_1500/Temperatur/Ist
+      soll: S7_1500/Temperatur/Soll
+      differenz: S7_1500/Temperatur/Differenz
+    test: Random/Integer
+
+logging:
+  level:
+    de.hochschule.bochum: DEBUG
+    org.springframework.integration.mqtt: INFO
