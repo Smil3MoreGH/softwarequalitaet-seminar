@@ -35,7 +35,11 @@ public class MqttMessageHandler {
     @ServiceActivator(inputChannel = "mqttInputChannel")
     public void handleMessage(Message<?> message, @Header("mqtt_receivedTopic") String topic) {
         String payload = message.getPayload().toString();
-        log.debug("Received message from topic {}: {}", topic, payload);
+        log.info("====================================");
+        log.info("MQTT MESSAGE RECEIVED!");
+        log.info("Topic: {}", topic);
+        log.info("Payload: {}", payload);
+        log.info("====================================");
 
         try {
             if (topic.equals(wagoStatusTopic)) {
@@ -58,10 +62,14 @@ public class MqttMessageHandler {
         try {
             Integer status = Integer.parseInt(payload.trim());
             WagoData wagoData = new WagoData(status);
-            wagoRepository.save(wagoData);
-            log.info("Saved Wago status: {}", status);
+            WagoData saved = wagoRepository.save(wagoData);
+            log.info("✅ WAGO DATA SAVED!");
+            log.info("   Status: {}", status);
+            log.info("   Binary: {}", Integer.toBinaryString(status));
+            log.info("   ID: {}", saved.getId());
+            log.info("   Timestamp: {}", saved.getTimestamp());
         } catch (NumberFormatException e) {
-            log.error("Invalid Wago status format: {}", payload);
+            log.error("❌ Invalid Wago status format: {}", payload);
         }
     }
 
@@ -69,10 +77,13 @@ public class MqttMessageHandler {
         try {
             Double temperature = Double.parseDouble(payload.trim());
             SiemensData siemensData = new SiemensData(temperature, type);
-            siemensRepository.save(siemensData);
-            log.info("Saved Siemens {} temperature: {}", type, temperature);
+            SiemensData saved = siemensRepository.save(siemensData);
+            log.info("✅ SIEMENS {} DATA SAVED!", type);
+            log.info("   Temperature: {}", temperature);
+            log.info("   ID: {}", saved.getId());
+            log.info("   Timestamp: {}", saved.getTimestamp());
         } catch (NumberFormatException e) {
-            log.error("Invalid Siemens temperature format: {}", payload);
+            log.error("❌ Invalid Siemens temperature format: {}", payload);
         }
     }
 }
