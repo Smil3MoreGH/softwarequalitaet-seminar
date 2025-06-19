@@ -2,4 +2,5 @@
 /home/paulhartung/IdeaProjects/softwarequalitaet-seminar/mqtt-consumer-service/src/main/java/de/hochschule/bochum/mqttconsumer/config/MqttConfig.java
 /home/paulhartung/IdeaProjects/softwarequalitaet-seminar/mqtt-consumer-service/src/main/java/de/hochschule/bochum/mqttconsumer/repository/SiemensDataRepository.java
 /home/paulhartung/IdeaProjects/softwarequalitaet-seminar/mqtt-consumer-service/src/main/java/de/hochschule/bochum/mqttconsumer/repository/WagoDataRepository.java
+/home/paulhartung/IdeaProjects/softwarequalitaet-seminar/mqtt-consumer-service/src/main/java/de/hochschule/bochum/mqttconsumer/service/MqttConnectionListener.java
 /home/paulhartung/IdeaProjects/softwarequalitaet-seminar/mqtt-consumer-service/src/main/java/de/hochschule/bochum/mqttconsumer/service/MqttMessageHandler.java

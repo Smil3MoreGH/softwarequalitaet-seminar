@@ -17,7 +17,7 @@ mqtt:
   broker:
     url: tcp://sr-labor.ddns.net:1883
     username: paul.hartung@stud.hs-bochum.de
-    password: 18464155
+    password: "018464155"
     client-id: rest-api-${random.uuid}
   topics:
     wago:

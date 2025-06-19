@@ -1,5 +1,6 @@
 /home/paulhartung/IdeaProjects/softwarequalitaet-seminar/rest-api-service/src/main/java/de/hochschule/bochum/restapi/RestApiServiceApplication.java
 /home/paulhartung/IdeaProjects/softwarequalitaet-seminar/rest-api-service/src/main/java/de/hochschule/bochum/restapi/config/MqttConfig.java
+/home/paulhartung/IdeaProjects/softwarequalitaet-seminar/rest-api-service/src/main/java/de/hochschule/bochum/restapi/controller/HealthController.java
 /home/paulhartung/IdeaProjects/softwarequalitaet-seminar/rest-api-service/src/main/java/de/hochschule/bochum/restapi/controller/SiemensController.java
 /home/paulhartung/IdeaProjects/softwarequalitaet-seminar/rest-api-service/src/main/java/de/hochschule/bochum/restapi/controller/WagoController.java
 /home/paulhartung/IdeaProjects/softwarequalitaet-seminar/rest-api-service/src/main/java/de/hochschule/bochum/restapi/repository/SiemensDataRepository.java

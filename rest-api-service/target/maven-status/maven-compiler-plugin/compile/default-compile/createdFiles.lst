@@ -1,4 +1,5 @@
 de/hochschule/bochum/restapi/controller/SiemensController.class
+de/hochschule/bochum/restapi/controller/HealthController.class
 de/hochschule/bochum/restapi/service/SiemensService.class
 de/hochschule/bochum/restapi/RestApiServiceApplication.class
 de/hochschule/bochum/restapi/service/WagoService.class

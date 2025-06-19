@@ -50,6 +50,15 @@ public class MqttMessageHandler {
                 handleSiemensTemperature(payload, "SOLL");
             } else if (topic.equals(siemensDifferenzTopic)) {
                 handleSiemensTemperature(payload, "DIFFERENZ");
+            } else if (topic.equals("Random/Integer")) {
+                // Use Random/Integer as test data
+                log.info("Using Random/Integer as test data");
+                handleWagoStatus(payload);
+                // Also create dummy Siemens data
+                Double randomTemp = Double.parseDouble(payload) / 10.0;
+                handleSiemensTemperature(String.valueOf(randomTemp + 20), "IST");
+                handleSiemensTemperature(String.valueOf(25.0), "SOLL");
+                handleSiemensTemperature(String.valueOf(randomTemp - 5), "DIFFERENZ");
             } else {
                 log.warn("Unknown topic: {}", topic);
             }
@@ -60,7 +69,9 @@ public class MqttMessageHandler {
 
     private void handleWagoStatus(String payload) {
         try {
-            Integer status = Integer.parseInt(payload.trim());
+            // Remove brackets if present
+            String cleanPayload = payload.trim().replaceAll("[\\[\\]]", "");
+            Integer status = Integer.parseInt(cleanPayload);
             WagoData wagoData = new WagoData(status);
             WagoData saved = wagoRepository.save(wagoData);
             log.info("✅ WAGO DATA SAVED!");

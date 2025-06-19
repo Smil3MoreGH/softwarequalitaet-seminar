@@ -91,10 +91,14 @@ function App() {
 
   // Convert status to binary representation for lights
   const getLightStatus = (status) => {
-    if (!status) return Array(16).fill(false);
+    if (!status && status !== 0) return Array(16).fill(false);
 
-    const binary = status.toString(2).padStart(16, '0');
-    return binary.split('').map(bit => bit === '1');
+    // Konvertiere zu 16-bit Binär (von rechts nach links)
+    const lights = [];
+    for (let i = 0; i < 16; i++) {
+      lights[i] = (status & (1 << i)) !== 0;
+    }
+    return lights;
   };
 
   const lights = wagoStatus ? getLightStatus(wagoStatus.status) : Array(16).fill(false);
