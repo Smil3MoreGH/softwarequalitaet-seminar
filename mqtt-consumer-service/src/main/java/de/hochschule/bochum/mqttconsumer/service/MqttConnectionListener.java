@@ -16,19 +16,19 @@ public class MqttConnectionListener {
 
     @EventListener
     public void handleMqttSubscribed(MqttSubscribedEvent event) {
-        log.info("🔗 ====================================");
-        log.info("🔗 MQTT CONNECTION SUCCESSFUL!");
-        log.info("🔗 Broker: {}", brokerUrl);
-        log.info("🔗 Message: {}", event.getMessage());
-        log.info("🔗 ====================================");
+        log.info("====================================");
+        log.info("MQTT CONNECTION SUCCESSFUL!");
+        log.info("Broker: {}", brokerUrl);
+        log.info("Message: {}", event.getMessage());
+        log.info("====================================");
     }
 
     @EventListener
     public void handleMqttConnectionFailed(MqttConnectionFailedEvent event) {
-        log.error("❌ ====================================");
-        log.error("❌ MQTT CONNECTION FAILED!");
-        log.error("❌ Broker: {}", brokerUrl);
-        log.error("❌ Cause: {}", event.getCause().getMessage());
-        log.error("❌ ====================================");
+        log.error("X ====================================");
+        log.error("X MQTT CONNECTION FAILED!");
+        log.error("X Broker: {}", brokerUrl);
+        log.error("X Cause: {}", event.getCause().getMessage());
+        log.error("X ====================================");
     }
 }

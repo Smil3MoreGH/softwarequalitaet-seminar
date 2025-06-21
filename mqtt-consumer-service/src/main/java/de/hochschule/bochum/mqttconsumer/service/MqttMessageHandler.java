@@ -60,10 +60,10 @@ public class MqttMessageHandler {
                 handleSiemensTemperature(String.valueOf(25.0), "SOLL");
                 handleSiemensTemperature(String.valueOf(randomTemp - 5), "DIFFERENZ");
             } else {
-                log.warn("Unknown topic: {}", topic);
+                log.warn("X Unknown topic: {}", topic);
             }
         } catch (Exception e) {
-            log.error("Error processing message from topic {}: {}", topic, e.getMessage());
+            log.error("X Error processing message from topic {}: {}", topic, e.getMessage());
         }
     }
 
@@ -74,13 +74,13 @@ public class MqttMessageHandler {
             Integer status = Integer.parseInt(cleanPayload);
             WagoData wagoData = new WagoData(status);
             WagoData saved = wagoRepository.save(wagoData);
-            log.info("✅ WAGO DATA SAVED!");
+            log.info("WAGO DATA SAVED!");
             log.info("   Status: {}", status);
             log.info("   Binary: {}", Integer.toBinaryString(status));
             log.info("   ID: {}", saved.getId());
             log.info("   Timestamp: {}", saved.getTimestamp());
         } catch (NumberFormatException e) {
-            log.error("❌ Invalid Wago status format: {}", payload);
+            log.error("X Invalid Wago status format: {}", payload);
         }
     }
 
@@ -89,12 +89,12 @@ public class MqttMessageHandler {
             Double temperature = Double.parseDouble(payload.trim());
             SiemensData siemensData = new SiemensData(temperature, type);
             SiemensData saved = siemensRepository.save(siemensData);
-            log.info("✅ SIEMENS {} DATA SAVED!", type);
+            log.info("SIEMENS {} DATA SAVED!", type);
             log.info("   Temperature: {}", temperature);
             log.info("   ID: {}", saved.getId());
             log.info("   Timestamp: {}", saved.getTimestamp());
         } catch (NumberFormatException e) {
-            log.error("❌ Invalid Siemens temperature format: {}", payload);
+            log.error("X Invalid Siemens temperature format: {}", payload);
         }
     }
 }

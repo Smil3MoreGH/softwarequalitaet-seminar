@@ -33,3 +33,5 @@ logging:
   level:
     de.hochschule.bochum: DEBUG
     org.springframework.integration.mqtt: INFO
+  file:
+    name: logs/mqtt-consumer.log

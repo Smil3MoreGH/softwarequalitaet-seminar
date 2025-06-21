@@ -6,4 +6,5 @@
 /home/paulhartung/IdeaProjects/softwarequalitaet-seminar/rest-api-service/src/main/java/de/hochschule/bochum/restapi/repository/SiemensDataRepository.java
 /home/paulhartung/IdeaProjects/softwarequalitaet-seminar/rest-api-service/src/main/java/de/hochschule/bochum/restapi/repository/WagoDataRepository.java
 /home/paulhartung/IdeaProjects/softwarequalitaet-seminar/rest-api-service/src/main/java/de/hochschule/bochum/restapi/service/SiemensService.java
+/home/paulhartung/IdeaProjects/softwarequalitaet-seminar/rest-api-service/src/main/java/de/hochschule/bochum/restapi/service/StartupLogger.java
 /home/paulhartung/IdeaProjects/softwarequalitaet-seminar/rest-api-service/src/main/java/de/hochschule/bochum/restapi/service/WagoService.java

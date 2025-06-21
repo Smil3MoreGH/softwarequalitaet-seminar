@@ -28,3 +28,5 @@ logging:
     de.hochschule.bochum: DEBUG
     org.springframework.web: DEBUG
     org.springframework.data.mongodb: DEBUG
+  file:
+    name: logs/rest-api-service.log
