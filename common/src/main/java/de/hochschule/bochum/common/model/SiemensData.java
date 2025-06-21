@@ -1,11 +1,13 @@
 package de.hochschule.bochum.common.model;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.LocalDateTime;
 
 @Data
+@NoArgsConstructor
 @Document(collection = "siemens_data")
 public class SiemensData {
     @Id
@@ -13,7 +15,7 @@ public class SiemensData {
     private Double istTemperatur;
     private Double sollTemperatur;
     private Double differenzTemperatur;
-    private String type; // "IST", "SOLL", "DIFFERENZ"
+    private String type;
     private LocalDateTime timestamp;
 
     public SiemensData(Double value, String type) {

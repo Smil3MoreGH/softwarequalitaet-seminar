@@ -26,3 +26,5 @@ mqtt:
 logging:
   level:
     de.hochschule.bochum: DEBUG
+    org.springframework.web: DEBUG
+    org.springframework.data.mongodb: DEBUG

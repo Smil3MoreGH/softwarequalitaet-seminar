@@ -1,6 +1,5 @@
 package de.hochschule.bochum.restapi.controller;
 
-
 import de.hochschule.bochum.common.model.SiemensData;
 import de.hochschule.bochum.restapi.service.SiemensService;
 import lombok.RequiredArgsConstructor;
