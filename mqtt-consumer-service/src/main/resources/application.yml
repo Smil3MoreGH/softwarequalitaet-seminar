@@ -35,3 +35,19 @@ logging:
     org.springframework.integration.mqtt: INFO
   file:
     name: logs/mqtt-consumer.log
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus,metrics
+      base-path: /actuator
+  endpoint:
+    prometheus:
+      enabled: true
+    health:
+      show-details: always
+  prometheus:
+    metrics:
+      export:
+        enabled: true

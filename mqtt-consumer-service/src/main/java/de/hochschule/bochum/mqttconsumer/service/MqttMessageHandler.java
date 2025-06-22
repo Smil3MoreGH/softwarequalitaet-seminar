@@ -4,6 +4,7 @@ import de.hochschule.bochum.common.model.SiemensData;
 import de.hochschule.bochum.common.model.WagoData;
 import de.hochschule.bochum.mqttconsumer.repository.SiemensDataRepository;
 import de.hochschule.bochum.mqttconsumer.repository.WagoDataRepository;
+import io.micrometer.core.instrument.MeterRegistry;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,6 +20,7 @@ public class MqttMessageHandler {
 
     private final WagoDataRepository wagoRepository;
     private final SiemensDataRepository siemensRepository;
+    private final MeterRegistry meterRegistry;
 
     @Value("${mqtt.topics.wago.status}")
     private String wagoStatusTopic;
@@ -40,6 +42,8 @@ public class MqttMessageHandler {
         log.info("Topic: {}", topic);
         log.info("Payload: {}", payload);
         log.info("====================================");
+
+        meterRegistry.counter("mqtt.messages.received", "topic", topic).increment();
 
         try {
             if (topic.equals(wagoStatusTopic)) {

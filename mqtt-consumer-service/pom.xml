@@ -46,6 +46,24 @@
             <artifactId>lombok</artifactId>
             <scope>provided</scope>
         </dependency>
+
+        <!-- Fügen Sie diese Dependency in die dependencies-Sektion der pom.xml ein -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!-- Falls noch nicht vorhanden, auch Actuator hinzufügen -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
+        <!-- Für Prometheus Metriken -->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

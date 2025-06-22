@@ -30,3 +30,19 @@ logging:
     org.springframework.data.mongodb: DEBUG
   file:
     name: logs/rest-api-service.log
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus,metrics
+      base-path: /actuator
+  endpoint:
+    prometheus:
+      enabled: true
+    health:
+      show-details: always
+  prometheus:
+    metrics:
+      export:
+        enabled: true
