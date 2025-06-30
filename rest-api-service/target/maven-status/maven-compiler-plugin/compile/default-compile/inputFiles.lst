@@ -1,10 +1,10 @@
 /home/paulhartung/IdeaProjects/softwarequalitaet-seminar/rest-api-service/src/main/java/de/hochschule/bochum/restapi/RestApiServiceApplication.java
-/home/paulhartung/IdeaProjects/softwarequalitaet-seminar/rest-api-service/src/main/java/de/hochschule/bochum/restapi/config/MqttConfig.java
+/home/paulhartung/IdeaProjects/softwarequalitaet-seminar/rest-api-service/src/main/java/de/hochschule/bochum/restapi/config/MqttApiConfig.java
 /home/paulhartung/IdeaProjects/softwarequalitaet-seminar/rest-api-service/src/main/java/de/hochschule/bochum/restapi/controller/HealthController.java
 /home/paulhartung/IdeaProjects/softwarequalitaet-seminar/rest-api-service/src/main/java/de/hochschule/bochum/restapi/controller/SiemensController.java
 /home/paulhartung/IdeaProjects/softwarequalitaet-seminar/rest-api-service/src/main/java/de/hochschule/bochum/restapi/controller/WagoController.java
 /home/paulhartung/IdeaProjects/softwarequalitaet-seminar/rest-api-service/src/main/java/de/hochschule/bochum/restapi/repository/SiemensDataRepository.java
 /home/paulhartung/IdeaProjects/softwarequalitaet-seminar/rest-api-service/src/main/java/de/hochschule/bochum/restapi/repository/WagoDataRepository.java
+/home/paulhartung/IdeaProjects/softwarequalitaet-seminar/rest-api-service/src/main/java/de/hochschule/bochum/restapi/service/ApiStartupLogger.java
 /home/paulhartung/IdeaProjects/softwarequalitaet-seminar/rest-api-service/src/main/java/de/hochschule/bochum/restapi/service/SiemensService.java
-/home/paulhartung/IdeaProjects/softwarequalitaet-seminar/rest-api-service/src/main/java/de/hochschule/bochum/restapi/service/StartupLogger.java
 /home/paulhartung/IdeaProjects/softwarequalitaet-seminar/rest-api-service/src/main/java/de/hochschule/bochum/restapi/service/WagoService.java

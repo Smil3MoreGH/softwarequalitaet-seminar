@@ -21,7 +21,13 @@ mqtt:
     client-id: rest-api-${random.uuid}
   topics:
     wago:
+      status: Wago750/Status
       control: Wago750/Control
+    siemens:
+      ist: S7_1500/Temperatur/Ist
+      soll: S7_1500/Temperatur/Soll
+      differenz: S7_1500/Temperatur/Differenz
+    test: Random/Integer
 
 logging:
   level:
