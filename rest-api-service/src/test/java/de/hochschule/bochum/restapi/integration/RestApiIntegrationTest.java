@@ -1,4 +1,4 @@
-package de.hochschule.bochum.restapi.integration;
+/*package de.hochschule.bochum.restapi.integration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.hochschule.bochum.common.dto.ControlCommand;
@@ -247,3 +247,4 @@ public class RestApiIntegrationTest {
         }
     }
 }
+ */

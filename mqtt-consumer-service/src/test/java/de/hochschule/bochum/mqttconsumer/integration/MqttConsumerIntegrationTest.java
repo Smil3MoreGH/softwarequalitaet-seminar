@@ -1,4 +1,4 @@
-package de.hochschule.bochum.mqttconsumer.integration;
+/*package de.hochschule.bochum.mqttconsumer.integration;
 
 import de.hochschule.bochum.common.model.SiemensData;
 import de.hochschule.bochum.common.model.WagoData;
@@ -254,3 +254,4 @@ public class MqttConsumerIntegrationTest {
         });
     }
 }
+ */

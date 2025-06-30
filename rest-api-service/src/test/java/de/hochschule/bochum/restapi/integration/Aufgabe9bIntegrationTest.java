@@ -3,6 +3,7 @@ package de.hochschule.bochum.restapi.integration;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.hochschule.bochum.common.dto.ControlCommand;
 import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -10,6 +11,7 @@ import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
@@ -57,6 +59,18 @@ public class Aufgabe9bIntegrationTest {
         // MongoDB Configuration - use the real MongoDB container
         r.add("spring.data.mongodb.uri", mongoDBContainer::getReplicaSetUrl);
         r.add("spring.data.mongodb.database", () -> "test-db");
+    }
+    @Autowired
+    private MongoTemplate mongoTemplate;
+
+    @BeforeEach
+    void clearDatabase() {
+        // Alle Collections löschen (bis auf system-internal)
+        for (String collectionName : mongoTemplate.getCollectionNames()) {
+            if (!collectionName.startsWith("system.")) {
+                mongoTemplate.dropCollection(collectionName);
+            }
+        }
     }
 
     @Autowired
