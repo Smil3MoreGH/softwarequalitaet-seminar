@@ -1,0 +1,24 @@
+# Test-Konfiguration für Integrationstests
+spring:
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: test_db
+      auto-index-creation: true
+
+# MQTT Test Topics
+mqtt:
+  topics:
+    wago:
+      status: test/wago/status
+    siemens:
+      ist: test/siemens/ist
+      soll: test/siemens/soll
+      differenz: test/siemens/differenz
+
+# Logging für Tests
+logging:
+  level:
+    de.hochschule.bochum: DEBUG
+    org.springframework.integration: DEBUG
