@@ -1,0 +1,20 @@
+spring:
+  data:
+    mongodb:
+      auto-index-creation: true
+
+mqtt:
+  broker:
+    url: tcp://localhost:1883
+    clientId: test-mqtt-consumer
+  topics:
+    siemens:
+      ist: mqtt/controller/Istwert
+      soll: mqtt/controller/Sollwert
+      differenz: mqtt/controller/Differenz
+    wago:
+      status: mqtt/Wago/status
+
+logging:
+  level:
+    de.hochschule.bochum: DEBUG

@@ -1,5 +1,5 @@
-/home/paulhartung/IdeaProjects/softwarequalitaet-seminar/rest-api-service/src/test/java/de/hochschule/bochum/integration/MqttToRestIntegrationTest.java
-/home/paulhartung/IdeaProjects/softwarequalitaet-seminar/rest-api-service/src/test/java/de/hochschule/bochum/integration/RestToMqttIntegrationTest.java
+/home/paulhartung/IdeaProjects/softwarequalitaet-seminar/rest-api-service/src/test/java/de/hochschule/bochum/restapi/config/TestConfig.java
 /home/paulhartung/IdeaProjects/softwarequalitaet-seminar/rest-api-service/src/test/java/de/hochschule/bochum/restapi/controller/WagoControllerTest.java
+/home/paulhartung/IdeaProjects/softwarequalitaet-seminar/rest-api-service/src/test/java/de/hochschule/bochum/restapi/integration/MqttRestIntegrationTest.java
 /home/paulhartung/IdeaProjects/softwarequalitaet-seminar/rest-api-service/src/test/java/de/hochschule/bochum/restapi/service/SiemensServiceTest.java
 /home/paulhartung/IdeaProjects/softwarequalitaet-seminar/rest-api-service/src/test/java/de/hochschule/bochum/restapi/service/WagoServiceTest.java

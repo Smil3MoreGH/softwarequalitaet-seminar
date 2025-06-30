@@ -20,7 +20,7 @@ public class MqttMessageHandler {
 
     private final MqttWagoDataRepository wagoRepository;
     private final MqttSiemensDataRepository siemensRepository;
-    //private final MeterRegistry meterRegistry;
+    private final MeterRegistry meterRegistry;
 
     @Value("${mqtt.topics.wago.status}")
     private String wagoStatusTopic;
@@ -43,7 +43,7 @@ public class MqttMessageHandler {
         log.info("Payload: {}", payload);
         log.info("====================================");
 
-        //meterRegistry.counter("mqtt.messages.received", "topic", topic).increment();
+        meterRegistry.counter("mqtt.messages.received", "topic", topic).increment();
 
         try {
             if (topic.equals(wagoStatusTopic)) {
