@@ -6,11 +6,8 @@ import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.DynamicPropertyRegistry;
@@ -32,9 +29,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
- * Aufgabe 9b: Integrationstest
- * Testet, ob ein POST-Request (Steuerbefehl) an den RESTful Web Service
- * das Senden einer Nachricht an die Wago-SPS auslöst.
+ * Integrationstest zu Aufgabe 9b:
+ *
+ * Hier teste ich die gesamte Prozesskette für einen Steuerbefehl:
+ * 1. Es wird ein REST-API POST auf /api/wago/control abgesetzt.
+ * 2. Es soll im Hintergrund eine MQTT-Nachricht mit dem Befehl an das Topic "Wago750/Control" gesendet werden.
+ * 3. Ich lausche selbst mit einem MQTT-Client auf diesem Topic und prüfe, ob der Befehl tatsächlich eintrifft.
+ *
+ * Ziel: Sicherstellen, dass ein REST-Aufruf tatsächlich das Senden einer MQTT-Nachricht auslöst.
+ * Es werden Testcontainer für Mosquitto (MQTT-Broker) und MongoDB verwendet.
  */
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -51,21 +54,22 @@ public class Aufgabe9bIntegrationTest {
 
     @DynamicPropertySource
     static void props(DynamicPropertyRegistry r) {
-        // MQTT Configuration
+        // Konfiguriere dynamisch die MQTT-Broker-URL für den Spring Context
         r.add("mqtt.broker.url", () -> "tcp://localhost:" + mosquitto.getMappedPort(1883));
         r.add("mqtt.broker.clientId", () -> "rest-api-test-client");
         r.add("mqtt.topics.wago.control", () -> "Wago750/Control");
 
-        // MongoDB Configuration - use the real MongoDB container
+        // Setze MongoDB-Konfiguration auf den Testcontainer
         r.add("spring.data.mongodb.uri", mongoDBContainer::getReplicaSetUrl);
         r.add("spring.data.mongodb.database", () -> "test-db");
     }
+
     @Autowired
     private MongoTemplate mongoTemplate;
 
     @BeforeEach
     void clearDatabase() {
-        // Alle Collections löschen (bis auf system-internal)
+        // Vor jedem Test werden alle Collections geleert (außer System-Collections)
         for (String collectionName : mongoTemplate.getCollectionNames()) {
             if (!collectionName.startsWith("system.")) {
                 mongoTemplate.dropCollection(collectionName);
@@ -81,10 +85,13 @@ public class Aufgabe9bIntegrationTest {
 
     @Test
     void integrationTest_PostTriggertMqttNachricht() throws Exception {
-        // Warte kurz, damit alle Services hochgefahren sind
+        // **Was mache ich?**
+        // Ich setze einen REST-POST-Befehl ab und prüfe, ob eine MQTT-Nachricht korrekt gesendet wird.
+
+        // Warte kurz, damit alle Container/Services bereit sind
         Thread.sleep(1000);
 
-        // Set up MQTT-Subscriber
+        // MQTT-Client vorbereitet, um auf das Steuer-Topic zu lauschen
         String brokerUrl = "tcp://localhost:" + mosquitto.getMappedPort(1883);
         CountDownLatch latch = new CountDownLatch(1);
         AtomicReference<String> nachricht = new AtomicReference<>();
@@ -96,19 +103,22 @@ public class Aufgabe9bIntegrationTest {
             latch.countDown();
         });
 
-        // POST an REST schicken
+        // Erzeuge das ControlCommand, das gesendet werden soll
         ControlCommand cmd = new ControlCommand();
         cmd.setCommand(2);
 
+        // Sende POST-Request an REST-API
         mockMvc.perform(post("/api/wago/control")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(cmd)))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Command sent: 2"));
 
-        // Prüfen, ob MQTT-Nachricht empfangen
+        // Warte bis zu 3 Sekunden, dass wirklich eine Nachricht empfangen wird
         assertTrue(latch.await(3, TimeUnit.SECONDS),
                 "MQTT-Nachricht sollte innerhalb von 3 Sekunden empfangen werden");
+
+        // Prüfe, ob der korrekte Wert als Payload angekommen ist
         assertEquals("2", nachricht.get());
 
         client.disconnect();

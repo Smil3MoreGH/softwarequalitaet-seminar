@@ -24,9 +24,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
- * Aufgabe 9a: Integrationstest
- * Testet, ob eine empfangene Nachricht in der Datenbank gespeichert
- * und über den RESTful Web Service korrekt abgerufen werden kann.
+ * Integrationstest zu Aufgabe 9a:
+ *
+ * In diesem Test prüfe ich die End-to-End-Funktionalität meines Systems:
+ * 1. Ich speichere einen (simulierten) über MQTT empfangenen Datensatz direkt in die MongoDB.
+ * 2. Ich stelle sicher, dass die Daten korrekt in der Datenbank gelandet sind.
+ * 3. Ich teste, ob die REST-API die Werte wieder korrekt ausliefert.
+ *
+ * Ziel: Sicherstellen, dass Daten, die von der SPS über MQTT empfangen wurden, auch wirklich
+ * über die REST-API abrufbar sind. Es wird mit echten Containern (Testcontainers) getestet.
  */
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -49,26 +55,26 @@ public class Aufgabe9aIntegrationTest {
 
     @BeforeEach
     void setup() {
+        // Vor jedem Test alle Siemens-Daten löschen (Clean Start)
         siemensDataRepository.deleteAll();
     }
 
     @Test
     void integrationTest_EmpfangSpeichernRestAbruf() throws Exception {
         // ========== SCHRITT 1: Simuliere MQTT-Nachrichtenempfang ==========
-        // Da wir im REST-Service sind, simulieren wir den Empfang durch direktes Speichern
-        // (In der Realität würde der MQTT-Consumer die Nachricht empfangen und speichern)
+        // Da in diesem Test kein echter MQTT-Consumer läuft, simuliere ich den Empfang einer Nachricht
+        // indem ich direkt einen Datensatz wie vom Handler in die Datenbank schreibe.
 
         Double empfangeneTemperatur = 23.5;
-        String topic = "mqtt/controller/Istwert";
 
-        // Simuliere die Verarbeitung einer MQTT-Nachricht
         SiemensData empfangeneDaten = new SiemensData(empfangeneTemperatur, "IST");
         empfangeneDaten.setTimestamp(LocalDateTime.now());
 
-        // Speichere in DB (wie es der echte MQTT-Handler tun würde)
+        // Speichere den Datensatz (so als wäre er per MQTT gekommen)
         SiemensData gespeichert = siemensDataRepository.save(empfangeneDaten);
 
         // ========== SCHRITT 2: Verifiziere Speicherung in Datenbank ==========
+        // Warte kurz, bis die Datenbank garantiert geschrieben hat (asynchron möglich)
         await().atMost(2, TimeUnit.SECONDS).untilAsserted(() -> {
             var alleDaten = siemensDataRepository.findAll();
             assertEquals(1, alleDaten.size(), "Genau ein Datensatz sollte gespeichert sein");
@@ -79,10 +85,12 @@ public class Aufgabe9aIntegrationTest {
         });
 
         // ========== SCHRITT 3: Teste REST-API Abruf ==========
+        // Jetzt rufe ich den REST-Endpunkt für den aktuellsten Ist-Wert auf
         mockMvc.perform(get("/api/siemens/temperatur/ist/latest"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.istTemperatur").value(23.5))
                 .andExpect(jsonPath("$.type").value("IST"))
                 .andExpect(jsonPath("$.timestamp").exists());
+        // Erwartung: Die REST-API gibt die gespeicherten Werte korrekt zurück.
     }
 }
