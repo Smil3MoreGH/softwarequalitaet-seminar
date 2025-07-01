@@ -3,19 +3,23 @@ import { Card, CardContent, CardHeader, CardTitle } from './components/ui/card';
 import { Button } from './components/ui/button';
 import { AlertCircle, Lightbulb } from 'lucide-react';
 
+// Hier lege ich die Basis-URL für meine API fest (kann später leicht angepasst werden)
 const API_BASE_URL = 'http://localhost:8080/api';
 
 function App() {
+  // State für den aktuellen Status der Wago-Lampen
   const [wagoStatus, setWagoStatus] = useState(null);
+  // State für die Siemens-Werte
   const [siemensData, setSiemensData] = useState({
     ist: null,
     soll: null,
     differenz: null
   });
+  // State für Ladeanzeige und Fehler
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Nur für Lampen (Wago)
+  // Hier hole ich regelmäßig den aktuellen Lampenstatus von der Wago SPS ab
   useEffect(() => {
     let active = true;
 
@@ -31,22 +35,24 @@ function App() {
       }
     };
 
-    pollWago(); // direkt beim Mount
-    const interval = setInterval(pollWago, 700); // alle 0,5s
+    pollWago(); // Gleich beim Start einmal ausführen
+    const interval = setInterval(pollWago, 700); // Polling alle 0,7 Sekunden
 
+    // Beim Unmount alles aufräumen
     return () => {
       active = false;
       clearInterval(interval);
     };
   }, []);
 
-  // Nur für Siemens-Werte (langsameres Polling)
+  // Hier hole ich regelmäßig die Temperaturwerte von der Siemens SPS (langsamer als bei Wago)
   useEffect(() => {
     let active = true;
 
     const pollSiemens = async () => {
       setLoading(true);
       try {
+        // Ich hole alle drei Werte parallel ab
         const [istRes, sollRes, diffRes] = await Promise.all([
           fetch(`${API_BASE_URL}/siemens/temperatur/ist/latest`),
           fetch(`${API_BASE_URL}/siemens/temperatur/soll/latest`),
@@ -72,7 +78,7 @@ function App() {
     };
 
     pollSiemens();
-    const interval = setInterval(pollSiemens, 1000); // alle 5s reicht meistens
+    const interval = setInterval(pollSiemens, 1000); // Polling alle 1 Sekunde
 
     return () => {
       active = false;
@@ -80,6 +86,7 @@ function App() {
     };
   }, []);
 
+  // Hier verschicke ich einen Control-Befehl an die Wago SPS
   const sendControlCommand = async (command) => {
     try {
       const response = await fetch(`${API_BASE_URL}/wago/control`, {
@@ -89,8 +96,8 @@ function App() {
       });
 
       if (response.ok) {
+        // Nach dem Senden nochmal sofort aktualisieren
         setTimeout(() => {
-          // Sofort neu holen nach Schalten!
           fetch(`${API_BASE_URL}/wago/status/latest`)
               .then(res => res.ok ? res.json() : null)
               .then(data => setWagoStatus(data));
@@ -101,19 +108,22 @@ function App() {
     }
   };
 
-  // Lampen-Logik wie gehabt:
+  // Hier wandle ich den Integer-Status der Wago in ein Array für die 16 Lampen um
   const getLightStatus = (status) => {
     if (!status && status !== 0) return Array(16).fill(false);
+    // Bitweise prüfen, ob die Lampe an ist
     return Array.from({ length: 16 }, (_, i) => (status & (1 << i)) !== 0);
   };
   const lights = wagoStatus ? getLightStatus(wagoStatus.status) : Array(16).fill(false);
 
+  // Ab hier folgt mein Frontend-Layout mit Tailwind und shadcn/ui Komponenten
   return (
       <div className="min-h-screen bg-gray-50 p-4">
         <div className="max-w-6xl mx-auto">
           <h1 className="text-3xl font-bold text-center mb-8 text-gray-800">
             SPS Monitoring & Control System
           </h1>
+          {/* Fehleranzeige falls Fehler aufgetreten sind */}
           {error && (
               <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4 flex items-center">
                 <AlertCircle className="mr-2" />
@@ -121,13 +131,14 @@ function App() {
               </div>
           )}
 
-          {/* Wago 750 Section */}
+          {/* Wago 750 Bereich */}
           <Card className="mb-6">
             <CardHeader>
               <CardTitle className="text-2xl">SPS: Wago 750</CardTitle>
             </CardHeader>
             <CardContent>
               <>
+                {/* Visualisierung der Lampen */}
                 <div className="grid grid-cols-8 gap-4 mb-6">
                   {lights.slice(0, 8).map((isOn, index) => (
                       <div key={index} className="flex flex-col items-center">
@@ -150,6 +161,7 @@ function App() {
                       </div>
                   ))}
                 </div>
+                {/* Buttons zum Senden der vier Steuerbefehle */}
                 <div className="flex gap-2 justify-center">
                   {[0, 1, 2, 3].map(mode => (
                       <Button
@@ -165,7 +177,7 @@ function App() {
             </CardContent>
           </Card>
 
-          {/* Siemens S7-1500 Section */}
+          {/* Siemens S7-1500 Bereich */}
           <Card>
             <CardHeader>
               <CardTitle className="text-2xl">SPS: S7-1500</CardTitle>
@@ -176,12 +188,15 @@ function App() {
               ) : (
                   <div className="space-y-4">
                     <div className="bg-blue-600 text-white p-4 rounded">
+                      {/* Anzeige Ist-Wert */}
                       <div className="text-lg font-semibold">Ist-Wert: {siemensData.ist?.toFixed(2) ?? 'N/A'}</div>
                     </div>
                     <div className="bg-blue-600 text-white p-4 rounded">
+                      {/* Anzeige Soll-Wert */}
                       <div className="text-lg font-semibold">Soll-Wert: {siemensData.soll?.toFixed(2) ?? 'N/A'}</div>
                     </div>
                     <div className="bg-blue-600 text-white p-4 rounded">
+                      {/* Anzeige Differenz */}
                       <div className="text-lg font-semibold">Differenz-Wert: {siemensData.differenz?.toFixed(2) ?? 'N/A'}</div>
                     </div>
                   </div>
