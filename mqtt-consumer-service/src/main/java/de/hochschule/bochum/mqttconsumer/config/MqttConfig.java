@@ -14,36 +14,31 @@ import org.springframework.integration.mqtt.support.DefaultPahoMessageConverter;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.MessageHandler;
 
+// Hier konfiguriere ich die komplette MQTT-Anbindung für meinen Service
 @Configuration
 public class MqttConfig {
 
+    // Konfiguration aus application.properties holen (Broker, User, PW usw.)
     @Value("${mqtt.broker.url}")
     private String brokerUrl;
-
     @Value("${mqtt.broker.username}")
     private String username;
-
     @Value("${mqtt.broker.password}")
     private String password;
-
     @Value("${mqtt.broker.client-id}")
     private String clientId;
-
     @Value("${mqtt.topics.wago.status}")
     private String wagoStatusTopic;
-
     @Value("${mqtt.topics.siemens.ist}")
     private String siemensIstTopic;
-
     @Value("${mqtt.topics.siemens.soll}")
     private String siemensSollTopic;
-
     @Value("${mqtt.topics.siemens.differenz}")
     private String siemensDifferenzTopic;
-
     @Value("${mqtt.topics.test}")
     private String testTopic;
 
+    // MQTT-Client-Factory mit meinen Broker-Settings (inkl. Auth)
     @Bean
     public MqttPahoClientFactory mqttClientFactory() {
         DefaultMqttPahoClientFactory factory = new DefaultMqttPahoClientFactory();
@@ -57,16 +52,19 @@ public class MqttConfig {
         return factory;
     }
 
+    // Hier landen alle eingehenden MQTT-Nachrichten
     @Bean
     public MessageChannel mqttInputChannel() {
         return new DirectChannel();
     }
 
+    // Für ausgehende MQTT-Nachrichten (z.B. Steuerbefehle)
     @Bean
     public MessageChannel mqttOutboundChannel() {
         return new DirectChannel();
     }
 
+    // Adapter für eingehende MQTT-Nachrichten: Abonniert alle relevanten Topics
     @Bean
     public MqttPahoMessageDrivenChannelAdapter inbound() {
         String[] topics = {
@@ -89,6 +87,7 @@ public class MqttConfig {
         return adapter;
     }
 
+    // Handler für ausgehende MQTT-Nachrichten (wird per @ServiceActivator automatisch benutzt)
     @Bean
     @ServiceActivator(inputChannel = "mqttOutboundChannel")
     public MessageHandler mqttOutbound() {
