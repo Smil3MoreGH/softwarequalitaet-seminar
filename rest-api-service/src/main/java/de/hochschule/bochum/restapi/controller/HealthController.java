@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.HashMap;
 import java.util.Map;
 
+// Health-Endpoint, um den Status von Datenbank & Service zu prüfen (wichtig z.B. für Monitoring)
 @Slf4j
 @RestController
 @RequestMapping("/api/health")
@@ -26,6 +27,7 @@ public class HealthController {
         status.put("service", "REST API Service");
 
         try {
+            // Hier prüfe ich, ob Mongo erreichbar ist und wie viele Datensätze es gibt
             long wagoCount = mongoTemplate.getCollection("wago_data").countDocuments();
             long siemensCount = mongoTemplate.getCollection("siemens_data").countDocuments();
 

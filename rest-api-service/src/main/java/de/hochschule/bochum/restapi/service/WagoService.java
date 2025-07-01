@@ -9,12 +9,14 @@ import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 import java.util.Optional;
 
+// Service für alle Wago-bezogenen Datenbank- und MQTT-Operationen
 @Service
 public class WagoService {
 
     private final WagoDataRepository wagoRepository;
     private final MessageChannel mqttOutboundChannel;
 
+    // mqttOutboundChannel wird per Qualifier injiziert (kommt aus der MqttApiConfig)
     public WagoService(
             WagoDataRepository wagoRepository,
             @Qualifier("mqttOutboundChannel") MessageChannel mqttOutboundChannel
@@ -23,10 +25,12 @@ public class WagoService {
         this.mqttOutboundChannel = mqttOutboundChannel;
     }
 
+    // Gibt den letzten Status der Lampen zurück
     public Optional<WagoData> getLatestStatus() {
         return wagoRepository.findTopByOrderByTimestampDesc();
     }
 
+    // Sendet einen Steuerbefehl (0-3) an die Wago SPS via MQTT
     public void sendControlCommand(Integer command) {
         if (command < 0 || command > 3) {
             throw new IllegalArgumentException("Command must be between 0 and 3");

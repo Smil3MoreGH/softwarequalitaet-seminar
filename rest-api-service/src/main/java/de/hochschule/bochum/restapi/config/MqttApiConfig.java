@@ -12,21 +12,21 @@ import org.springframework.integration.mqtt.outbound.MqttPahoMessageHandler;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.MessageHandler;
 
+// Hier konfiguriere ich MQTT für meinen REST-API-Service (nur für Outbound/Publish!)
 @Configuration
 public class MqttApiConfig {
 
+    // Werte aus application.properties einlesen
     @Value("${mqtt.broker.url}")
     private String brokerUrl;
-
     @Value("${mqtt.broker.username}")
     private String username;
-
     @Value("${mqtt.broker.password}")
     private String password;
-
     @Value("${mqtt.broker.client-id}")
     private String clientId;
 
+    // MQTT-Client für Outbound-Kommunikation (Steuerbefehle an Wago)
     @Bean
     public MqttPahoClientFactory mqttApiClientFactory() {
         DefaultMqttPahoClientFactory factory = new DefaultMqttPahoClientFactory();
@@ -40,11 +40,13 @@ public class MqttApiConfig {
         return factory;
     }
 
+    // Channel für ausgehende MQTT-Messages
     @Bean
     public MessageChannel mqttApiOutboundChannel() {
         return new DirectChannel();
     }
 
+    // Handler zum Veröffentlichen von Nachrichten (wird im Service benutzt)
     @Bean
     @ServiceActivator(inputChannel = "mqttOutboundChannel")
     public MessageHandler mqttApiOutbound() {
