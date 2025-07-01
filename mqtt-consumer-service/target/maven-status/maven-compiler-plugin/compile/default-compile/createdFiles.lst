@@ -1,7 +1,7 @@
 de/hochschule/bochum/mqttconsumer/repository/MqttSiemensDataRepository.class
+de/hochschule/bochum/mqttconsumer/MqttConsumerApplication.class
 de/hochschule/bochum/mqttconsumer/service/MqttConnectionListener.class
 de/hochschule/bochum/mqttconsumer/service/MqttMessageHandler.class
-de/hochschule/bochum/mqttconsumer/MqttConsumerApplication.class
 de/hochschule/bochum/mqttconsumer/config/MqttConfig.class
 de/hochschule/bochum/mqttconsumer/service/StartupLogger.class
 de/hochschule/bochum/mqttconsumer/repository/MqttWagoDataRepository.class
